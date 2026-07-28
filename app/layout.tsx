@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Orbitron, DM_Sans } from "next/font/google"
+import Script from "next/script"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import "./globals.css"
@@ -15,6 +16,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`dark ${orbitron.variable} ${dmSans.variable}`}>
+      <Script
+        src="https://quge5.com/88/tag.min.js"
+        data-zone="264831"
+        data-cfasync="false"
+        strategy="beforeInteractive"
+      />
       <body className="font-body bg-[#0a0a1a] text-slate-100 antialiased min-h-screen flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
         <Header />
         <main className="flex-1">{children}</main>
