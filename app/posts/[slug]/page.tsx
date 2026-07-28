@@ -1,92 +1,141 @@
 import { notFound } from "next/navigation"
 import Image from "next/image"
-import { Calendar, Clock } from "lucide-react"
+import Link from "next/link"
+import { Calendar, Clock, ArrowLeft, Share2, Tag, BookOpen } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
-import { getVideo } from "@/lib/content"
-import VideoEmbed from "@/components/VideoEmbed"
+import { getVideo, getVideos } from "@/lib/content"
+import VideoCard from "@/components/VideoCard"
 
 export default async function Post({ params }: { params: Promise<Record<string, string>> }) {
   const { slug } = await params
   const video = await getVideo(slug)
   if (!video) notFound()
 
+  const allVideos = await getVideos()
+  const relatedVideos = allVideos
+    .filter((v) => v.slug !== slug && (v.category === video.category || v.page === video.page))
+    .slice(0, 3)
+
+  // Markdown Custom Renderers
   const Heading2 = ({ children }: any) => (
-    <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mt-10 mb-4 border-l-4 border-cyan-500 pl-4">{children}</h2>
+    <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mt-12 mb-6 border-l-4 border-cyan-400 pl-4 py-1 bg-gradient-to-r from-cyan-950/30 to-transparent rounded-r-lg">
+      {children}
+    </h2>
   )
 
   const Heading3 = ({ children }: any) => (
-    <h3 className="text-xl font-heading font-semibold text-slate-100 mt-8 mb-3">{children}</h3>
+    <h3 className="text-xl font-heading font-bold text-cyan-200 mt-8 mb-4 flex items-center gap-2">
+      <span className="w-2 h-2 rounded-full bg-cyan-400" />
+      {children}
+    </h3>
   )
 
   const Paragraph = ({ children }: any) => (
-    <p className="mb-5 leading-8 text-slate-300">{children}</p>
+    <div className="mb-6 leading-relaxed text-slate-300 text-base md:text-lg font-normal">{children}</div>
   )
 
-  const UnorderedList = ({ children }: any) => (
-    <ul className="space-y-3 my-6">{children}</ul>
-  )
+  const UnorderedList = ({ children }: any) => <ul className="space-y-3 my-6 pl-2">{children}</ul>
 
   const ListItem = ({ children }: any) => (
-    <li className="text-slate-300 relative pl-6 before:content-['♦'] before:absolute before:left-0 before:text-cyan-500">{children}</li>
+    <li className="text-slate-300 relative pl-6 before:content-['◆'] before:absolute before:left-0 before:text-cyan-400 before:text-xs before:top-1 leading-relaxed">
+      {children}
+    </li>
   )
 
   const BlockQuote = ({ children }: any) => (
-    <blockquote className="border-l-4 border-amber-500 pl-6 py-4 my-8 bg-white/[0.02] rounded-r-xl text-lg text-slate-200 italic">{children}</blockquote>
+    <blockquote className="border-l-4 border-amber-400 pl-6 py-4 my-8 bg-gradient-to-r from-amber-500/10 to-transparent rounded-r-2xl text-lg text-amber-100 italic shadow-inner">
+      {children}
+    </blockquote>
   )
 
-  const Strong = ({ children }: any) => (
-    <strong className="text-white font-bold">{children}</strong>
-  )
+  const Strong = ({ children }: any) => <strong className="text-white font-bold">{children}</strong>
 
-  const Emphasis = ({ children }: any) => (
-    <em className="text-cyan-400 not-italic">{children}</em>
-  )
+  const Emphasis = ({ children }: any) => <em className="text-cyan-400 not-italic font-medium">{children}</em>
 
-  const Hr = () => (
-    <hr className="border-white/10 my-12" />
-  )
+  const Hr = () => <hr className="border-t border-white/10 my-10" />
 
   const MdImage = ({ src, alt }: any) => (
-    <div className="my-8 rounded-xl overflow-hidden shadow-lg border border-white/5">
-      <img src={src} alt={alt || ""} className="w-full object-cover" />
-      {alt && <p className="text-center text-xs text-slate-500 py-2 px-4 bg-black/40">{alt}</p>}
+    <span className="my-10 block rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-zinc-950">
+      <img src={src} alt={alt || ""} className="w-full object-cover max-h-[500px]" />
+      {alt && <span className="block text-center text-xs text-slate-400 py-3 px-4 bg-zinc-950/90 border-t border-white/5">{alt}</span>}
+    </span>
+  )
+
+  const Table = ({ children }: any) => (
+    <div className="my-8 overflow-x-auto rounded-xl border border-white/10 shadow-xl bg-zinc-950">
+      <table className="w-full text-left border-collapse text-sm">{children}</table>
     </div>
   )
 
+  const Thead = ({ children }: any) => (
+    <thead className="bg-zinc-900 text-cyan-400 font-heading text-xs uppercase tracking-wider border-b border-white/10">
+      {children}
+    </thead>
+  )
+
+  const Tbody = ({ children }: any) => <tbody className="divide-y divide-white/5 text-slate-300">{children}</tbody>
+
+  const Tr = ({ children }: any) => <tr className="hover:bg-white/[0.02] transition-colors">{children}</tr>
+
+  const Th = ({ children }: any) => <th className="px-5 py-3.5 font-semibold">{children}</th>
+
+  const Td = ({ children }: any) => <td className="px-5 py-3.5 leading-relaxed">{children}</td>
+
+  const Pre = ({ children }: any) => (
+    <div className="my-8 rounded-xl overflow-hidden border border-cyan-500/20 bg-zinc-950 shadow-2xl p-4 font-mono text-sm text-cyan-300 overflow-x-auto leading-relaxed">
+      <pre>{children}</pre>
+    </div>
+  )
+
+  const Code = ({ children }: any) => (
+    <code className="px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-sm font-mono font-medium">
+      {children}
+    </code>
+  )
+
   return (
-    <article>
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-        {video.thumbnail && (
-          <div className="absolute inset-0">
-            <Image src={video.thumbnail} alt="" fill className="object-cover" priority />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-purple-500/10" />
-        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs uppercase tracking-widest text-cyan-400">
-              <Clock className="w-3 h-3" />{video.readingTime} min
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs uppercase tracking-widest text-slate-400">
-              <Calendar className="w-3 h-3" />{new Date(video.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-            </span>
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs uppercase tracking-widest text-amber-400">
-              {video.category}
-            </span>
-          </div>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6 text-white" style={{ textShadow: "0 0 40px rgba(0,212,255,0.3)" }}>
-            {video.title}
-          </h1>
-          <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">{video.description}</p>
+    <article className="min-h-screen pb-24">
+      {/* Back Navigation Bar */}
+      <div className="max-w-4xl mx-auto px-4 pt-8">
+        <Link
+          href="/posts"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all mb-8"
+        >
+          <ArrowLeft className="w-4 h-4" /> Back to Explanations
+        </Link>
+      </div>
+
+      {/* Hero Header */}
+      <section className="relative max-w-4xl mx-auto px-4 mb-12">
+        <div className="flex items-center gap-3 mb-6 flex-wrap">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-xs uppercase tracking-widest text-cyan-400 font-semibold">
+            <Clock className="w-3.5 h-3.5" />
+            {video.readingTime} min read
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs uppercase tracking-widest text-slate-400 font-medium">
+            <Calendar className="w-3.5 h-3.5" />
+            {new Date(video.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-xs uppercase tracking-widest text-purple-300 font-semibold">
+            <Tag className="w-3.5 h-3.5" />
+            {video.category}
+          </span>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent" />
+
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-white tracking-tight leading-tight mb-6">
+          {video.title}
+        </h1>
+
+        <p className="text-lg md:text-xl text-slate-300 leading-relaxed font-light border-l-2 border-cyan-500/50 pl-4">
+          {video.description}
+        </p>
       </section>
 
-      <div className="max-w-4xl mx-auto px-4 -mt-16 relative z-20 pb-24">
-        <div className="bg-zinc-900/90 backdrop-blur-xl rounded-2xl p-6 md:p-10 shadow-2xl border border-white/5">
-          <VideoEmbed url={video.videoUrl} title={video.title} />
+      {/* Article Content Container */}
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="bg-zinc-900/60 backdrop-blur-2xl rounded-3xl p-6 md:p-12 shadow-2xl border border-white/10">
+          {/* Rendered Markdown Body */}
           <div className="prose-cosmic">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
@@ -101,6 +150,14 @@ export default async function Post({ params }: { params: Promise<Record<string, 
                 strong: Strong,
                 em: Emphasis,
                 hr: Hr,
+                table: Table,
+                thead: Thead,
+                tbody: Tbody,
+                tr: Tr,
+                th: Th,
+                td: Td,
+                pre: Pre,
+                code: Code,
               }}
             >
               {video.content}
@@ -108,6 +165,28 @@ export default async function Post({ params }: { params: Promise<Record<string, 
           </div>
         </div>
       </div>
+
+      {/* Related Explanations */}
+      {relatedVideos.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 pt-20">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-heading font-bold text-white flex items-center gap-2">
+              <BookOpen className="w-6 h-6 text-cyan-400" />
+              Related Explanations
+            </h2>
+            <Link href="/posts" className="text-sm font-semibold text-cyan-400 hover:underline">
+              View All &rarr;
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {relatedVideos.map((v) => (
+              <Link key={v.slug} href={`/posts/${v.slug}`} className="block h-full">
+                <VideoCard video={v} />
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </article>
   )
 }
