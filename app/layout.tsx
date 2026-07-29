@@ -9,8 +9,8 @@ const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-heading" })
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-body" })
 
 export const metadata: Metadata = {
-  title: "PageCore - Facebook Video Explanations",
-  description: "In-depth explanations of Facebook videos from all your pages",
+  title: "PageCore - Deep Space Explained",
+  description: "In-depth coverage of humanity's most ambitious space missions — from the lunar south pole to the asteroid belt.",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         data-cfasync="false"
         strategy="beforeInteractive"
       />
-      <body className="font-body bg-[#0a0a1a] text-slate-100 antialiased min-h-screen flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
+      <body className="font-body bg-[#050510] text-slate-100 antialiased min-h-screen flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

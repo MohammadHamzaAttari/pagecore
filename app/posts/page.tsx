@@ -1,200 +1,107 @@
 import Link from "next/link"
-import VideoCard from "@/components/VideoCard"
-import { getVideos, getCategories, getPages } from "@/lib/content"
-import { Search, Filter, Sparkles, X } from "lucide-react"
+import Image from "next/image"
+import { getVideos } from "@/lib/content"
+import { Calendar, Clock, ArrowUpRight, Satellite } from "lucide-react"
 
-export default async function Posts({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | undefined>>
-}) {
-  const params = await searchParams
-  const category = params?.category
-  const pageParam = params?.page
-  const query = params?.q?.toLowerCase().trim()
-
+export default async function Posts() {
   const videos = await getVideos()
-  const categories = await getCategories()
-  const pages = await getPages()
-
-  let filtered = videos
-
-  if (category) {
-    filtered = filtered.filter((v) => v.category === category)
-  }
-
-  if (pageParam) {
-    filtered = filtered.filter((v) => v.page === pageParam)
-  }
-
-  if (query) {
-    filtered = filtered.filter(
-      (v) =>
-        v.title.toLowerCase().includes(query) ||
-        v.description?.toLowerCase().includes(query) ||
-        v.category?.toLowerCase().includes(query) ||
-        v.content?.toLowerCase().includes(query)
-    )
-  }
-
-  // Helper to build filter URLs preserving active parameters
-  const buildUrl = (newCat?: string | null, newPage?: string | null, newQuery?: string | null) => {
-    const search = new URLSearchParams()
-    const activeCat = newCat === null ? undefined : newCat !== undefined ? newCat : category
-    const activePage = newPage === null ? undefined : newPage !== undefined ? newPage : pageParam
-    const activeQuery = newQuery === null ? undefined : newQuery !== undefined ? newQuery : query
-
-    if (activeCat) search.set("category", activeCat)
-    if (activePage) search.set("page", activePage)
-    if (activeQuery) search.set("q", activeQuery)
-
-    const str = search.toString()
-    return str ? `/posts?${str}` : "/posts"
-  }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-      {/* Header Banner */}
-      <div className="mb-12 text-center md:text-left">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-xs uppercase tracking-widest text-cyan-400 font-semibold mb-4">
-          <Sparkles className="w-3.5 h-3.5" /> Archive &amp; Directory
-        </div>
-        <h1 className="text-4xl md:text-5xl font-heading font-bold text-white tracking-tight mb-4">
-          Facebook Video Explanations
-        </h1>
-        <p className="text-slate-400 text-lg max-w-2xl leading-relaxed">
-          Search, filter, and explore comprehensive breakdowns across all categories and pages.
-        </p>
-      </div>
-
-      {/* Search & Filter Control Panel */}
-      <div className="bg-zinc-900/80 backdrop-blur-xl rounded-2xl p-6 border border-white/10 shadow-2xl mb-12 space-y-6">
-        {/* Search Bar Form */}
-        <form action="/posts" method="GET" className="relative">
-          {category && <input type="hidden" name="category" value={category} />}
-          {pageParam && <input type="hidden" name="page" value={pageParam} />}
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-          <input
-            type="text"
-            name="q"
-            defaultValue={query || ""}
-            placeholder="Search by title, topic, or keyword..."
-            className="w-full pl-12 pr-10 py-3.5 rounded-xl bg-zinc-950/80 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 text-sm transition-all"
+    <div className="relative min-h-screen pb-24">
+      {/* Star field */}
+      <div className="starfield" aria-hidden="true">
+        {Array.from({ length: 40 }).map((_, i) => (
+          <div
+            key={i}
+            className="star"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              width: `${Math.random() * 2 + 1}px`,
+              height: `${Math.random() * 2 + 1}px`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${Math.random() * 4 + 3}s`,
+            }}
           />
-          {query && (
-            <Link
-              href={buildUrl(undefined, undefined, null)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-white"
-            >
-              <X className="w-4 h-4" />
-            </Link>
-          )}
-        </form>
-
-        {/* Category Pills */}
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Filter className="w-3.5 h-3.5 text-cyan-400" />
-            <h2 className="text-xs font-heading uppercase tracking-widest text-slate-400 font-semibold">
-              Filter by Category
-            </h2>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Link
-              href={buildUrl(null, undefined, undefined)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all ${
-                !category
-                  ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 shadow-md shadow-cyan-500/25"
-                  : "bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10"
-              }`}
-            >
-              All Categories
-            </Link>
-            {categories.map((c) => (
-              <Link
-                key={c}
-                href={buildUrl(category === c ? null : c, undefined, undefined)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all ${
-                  category === c
-                    ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 shadow-md shadow-cyan-500/25"
-                    : "bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10"
-                }`}
-              >
-                {c}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Facebook Page Filter Pills */}
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-            <h2 className="text-xs font-heading uppercase tracking-widest text-slate-400 font-semibold">
-              Filter by Facebook Page
-            </h2>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Link
-              href={buildUrl(undefined, null, undefined)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all ${
-                !pageParam
-                  ? "bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-md shadow-purple-500/25"
-                  : "bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10"
-              }`}
-            >
-              All Pages
-            </Link>
-            {pages.map((p) => (
-              <Link
-                key={p}
-                href={buildUrl(undefined, pageParam === p ? null : p, undefined)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all ${
-                  pageParam === p
-                    ? "bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-md shadow-purple-500/25"
-                    : "bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10"
-                }`}
-              >
-                {p}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Clear Filters Status Bar */}
-        {(category || pageParam || query) && (
-          <div className="pt-4 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
-            <span>
-              Showing <strong className="text-white">{filtered.length}</strong> result{filtered.length !== 1 ? "s" : ""}
-            </span>
-            <Link href="/posts" className="text-cyan-400 hover:underline flex items-center gap-1">
-              <X className="w-3.5 h-3.5" /> Reset All Filters
-            </Link>
-          </div>
-        )}
-      </div>
-
-      {/* Explanations Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((v) => (
-          <Link key={v.slug} href={`/posts/${v.slug}`} className="block h-full">
-            <VideoCard video={v} />
-          </Link>
         ))}
       </div>
 
-      {/* Empty State */}
-      {filtered.length === 0 && (
-        <div className="text-center py-20 bg-zinc-900/40 rounded-2xl border border-white/5">
-          <p className="text-slate-400 text-lg font-medium mb-4">No explanations match your current filters.</p>
-          <Link
-            href="/posts"
-            className="inline-flex items-center px-6 py-2.5 rounded-full bg-cyan-500 text-slate-950 font-semibold text-sm hover:bg-cyan-400 transition-all"
-          >
-            Clear Filters &amp; View All
-          </Link>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        {/* Header */}
+        <div className="mb-16 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-xs font-heading font-semibold tracking-[0.15em] text-cyan-400/80 mb-6 backdrop-blur-sm">
+            <Satellite className="w-3.5 h-3.5" /> Mission Archive
+          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white tracking-tight mb-4">
+            All Mission Briefings
+          </h1>
+          <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
+            Comprehensive coverage of humanity&apos;s most ambitious space exploration missions.
+          </p>
         </div>
-      )}
+
+        {/* Articles Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {videos.map((video) => (
+            <Link
+              key={video.slug}
+              href={`/posts/${video.slug}`}
+              className="group relative"
+            >
+              <div className="h-full rounded-3xl overflow-hidden border border-white/[0.06] bg-zinc-900/40 backdrop-blur-sm shadow-xl transition-all duration-500 hover:border-cyan-500/30 hover:shadow-cyan-500/5">
+                {/* Image */}
+                <div className="relative h-64 overflow-hidden">
+                  <Image
+                    src={video.thumbnail || "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=800&q=80"}
+                    alt={video.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-950/80 backdrop-blur-md border border-white/[0.08] text-[11px] font-heading font-semibold uppercase tracking-widest text-cyan-400">
+                      <Satellite className="w-3 h-3" />
+                      {video.category}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-7">
+                  <h3 className="text-xl md:text-2xl font-heading font-bold text-white group-hover:text-cyan-300 transition-colors leading-tight mb-3">
+                    {video.title}
+                  </h3>
+                  <p className="text-slate-400 text-sm leading-relaxed line-clamp-3 mb-5">
+                    {video.description}
+                  </p>
+                  <div className="flex items-center justify-between text-xs text-slate-500">
+                    <div className="flex items-center gap-3">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5" />
+                        {new Date(video.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5" />
+                        {video.readingTime} min
+                      </span>
+                    </div>
+                    <span className="text-cyan-400 font-heading text-xs font-semibold uppercase tracking-wider group-hover:tracking-[0.15em] transition-all">
+                      Read <ArrowUpRight className="w-3 h-3 inline" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Empty State */}
+        {videos.length === 0 && (
+          <div className="text-center py-24">
+            <p className="text-slate-500 text-lg">No mission briefings available yet.</p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
