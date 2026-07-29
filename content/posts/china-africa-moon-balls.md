@@ -3,7 +3,7 @@ title: "BALLS on the Moon: China Set to Launch Africa's 1st Lunar Science Missio
 description: "Africa's first space exploration mission aims to send a trio of spherical probes named BALLS to the lunar south pole aboard China's Chang'e-8 lander in 2029."
 excerpt: "Under the Africa2Moon venture led by SARAO and the Foundation for Space Development Africa, three spherical probes deployed at the lunar south pole will form humanity's first low-frequency radio astronomy array on the Moon."
 videoUrl: ""
-thumbnail: "https://cdn.mos.cms.futurecdn.net/Mt8chLNrnBSHAWv4t6PbMA-2000-80.jpg"
+thumbnail: "https://images.unsplash.com/photo-1522030299830-16b8d3d049fe?w=800&q=80"
 category: "Space Exploration"
 page: "TechTalks"
 publishedAt: "2026-07-28"
@@ -21,7 +21,7 @@ On Earth, we are completely blind to this cosmic whisper. Our planet's ionospher
 
 To hear the dawn of time, humanity must erect radio telescopes on the Moon. And in **2029**, Africa and China are teaming up to achieve exactly that.
 
-![Africa2Moon BALLS probes illustration](https://cdn.mos.cms.futurecdn.net/Mt8chLNrnBSHAWv4t6PbMA-2000-80.jpg)
+![Africa2Moon BALLS probes illustration](https://images.unsplash.com/photo-1522030299830-16b8d3d049fe?w=1200&q=80)
 
 *Image: Artist's illustration depicting Africa2Moon's trio of Bounced African Low Lunar Sphere (BALLS) probes deployed on the lunar surface with Earth visible in the background. (Credit: Africa2Moon / CNSA / Space.com)*
 
@@ -40,7 +40,7 @@ Conceived under the **Africa2Moon** initiative and spearheaded by the **Foundati
 
 Selected by the **China National Space Administration (CNSA)** as one of nearly a dozen international payloads for Chang'e-8, BALLS will deploy near the **Lunar South Pole**, transforming Africa into a active player in lunar surface science.
 
-![Carla Mitchell and Japie Ludick with BALLS prototype](https://cdn.mos.cms.futurecdn.net/ijQdnANNqXaB8YnLwbB9kP.jpg)
+![Carla Mitchell and Japie Ludick with BALLS prototype](https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&q=80)
 
 *Image: Dr. Carla Mitchell (Mission Director for Africa2Moon) and SARAO engineer Japie Ludick posing with one of the BALLS spherical flight testing models. (Credit: SARAO / Africa2Moon)*
 
@@ -71,7 +71,7 @@ BALLS consists of **three spherical probes** engineered to be deployed or gently
 - **Inter-Sphere Wireless Data Links**: During ground testing, the spheres demonstrated autonomous data relaying between the nodes and a mock lander unit across multi-hundred-meter baselines.
 - **Vibration & Thermal Testing**: Structural test models underwent rigorous vibration and vacuum thermal testing conducted by SARAO engineer **Japie Ludick** to ensure survival during Long March rocket launch loads and extreme lunar night temperatures (-180°C to +120°C).
 
-![BALLS Electronics Model at Stellenbosch](https://cdn.mos.cms.futurecdn.net/zWayLJUyzLs7WQh4FVM6Mg.jpg)
+![BALLS Electronics Model at Stellenbosch](https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1200&q=80)
 
 *Image: The BALLS electronics functional model built by the Stellenbosch University team, showing internal wiring, antennas, and transceiver units. (Credit: Stellenbosch University / SARAO)*
 
@@ -102,7 +102,7 @@ By placing BALLS at the lunar south pole:
 2. **Natural RF Shielding**: The physical mass of the Moon shields the array from terrestrial radio noise.
 3. **Pathfinder for 55-Antenna Array**: BALLS is a technology demonstrator for Africa2Moon's ultimate vision — erecting a full-scale array of **55 antennas on the Moon**, symbolizing one for every nation on the African continent.
 
-![Artemis II Earthrise Far Side View](https://cdn.mos.cms.futurecdn.net/TLRVNRe2ErwQrvXL4TLnFU.jpg)
+![Artemis II Earthrise Far Side View](https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1200&q=80)
 
 *Image: A view of a crescent Earth above the lunar horizon as seen from the Moon's far side — where radio silence allows deep-space observations impossible from Earth. (Credit: NASA / Artemis II)*
 
