@@ -20,7 +20,7 @@ But this wasn't just a navigation trick. The flyby gave mission scientists a rar
 > *"This gravity assist was years in the making, and the navigation team nailed it."*  
 > — **Bob Mase**, Psyche Project Manager, NASA JPL
 
-![Psyche spacecraft concept near Mars](https://images.unsplash.com/photo-1614313913007-ef22e7700eb5?w=1200&q=80)
+![Psyche spacecraft concept near Mars](https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1200&q=80)
 
 *Artist's concept of a spacecraft performing a Mars flyby. NASA's Psyche performed this exact maneuver on May 15, 2026. (Credit: NASA/JPL-Caltech)*
 
