@@ -1,11 +1,27 @@
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { Calendar, Clock, ArrowLeft, Share2, Tag, BookOpen } from "lucide-react"
+import type { Metadata } from "next"
+import { Calendar, Clock, ArrowLeft, Tag, BookOpen } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { getVideo, getVideos } from "@/lib/content"
 import VideoCard from "@/components/VideoCard"
+
+export async function generateStaticParams() {
+  return (await getVideos()).map((v) => ({ slug: v.slug }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<Record<string, string>> }): Promise<Metadata> {
+  const { slug } = await params
+  const video = await getVideo(slug)
+  if (!video) return {}
+  return {
+    title: `${video.title} — PageCore`,
+    description: video.description,
+    openGraph: { title: video.title, description: video.description, type: "article", publishedTime: video.publishedAt },
+  }
+}
 
 export default async function Post({ params }: { params: Promise<Record<string, string>> }) {
   const { slug } = await params
@@ -57,7 +73,9 @@ export default async function Post({ params }: { params: Promise<Record<string, 
 
   const MdImage = ({ src, alt }: any) => (
     <span className="my-10 block rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-zinc-950">
-      <img src={src} alt={alt || ""} className="w-full object-cover max-h-[500px]" />
+      <span className="relative block w-full aspect-video">
+        <Image src={src} alt={alt || ""} fill sizes="(max-width: 768px) 100vw, 800px" className="object-cover" loading="lazy" />
+      </span>
       {alt && <span className="block text-center text-xs text-slate-400 py-3 px-4 bg-zinc-950/90 border-t border-white/5">{alt}</span>}
     </span>
   )
